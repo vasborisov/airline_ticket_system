@@ -1,0 +1,71 @@
+﻿@model AirlineTicketSystem.Models.Flight.FlightViewModel
+
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isOperator = User.IsInRole("Operator");
+}
+
+@{
+    ViewData["Title"] = "Flight Booking";
+}
+
+@if(isAdmin || isOperator)
+{
+
+    <h2>Book Seat</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Departure City</th>
+                <th>Arrival City</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Capacity</th>
+                <th>Is Full</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>@Model.Id</th>
+                    <th>@Model.DepartureCity</th>
+                    <th>@Model.ArrivalCity</th>
+                    <th>@Model.Duration</th>
+                    <th>@Model.Price</th>
+                    <th>@Model.Capacity</th>
+                     @if (!@Model.IsFullyBooked)
+                    {
+                    <th>not full</th>
+                    }
+                    else
+                    {
+                    <th class="full">full</th>
+                    }
+        </tbody>
+    </table>
+
+    <div class="container-form">
+        <form method="post" asp-controller="Flight" asp-action="BookSeatAsync" asp-route-id="@Model.Id">
+            <input type="hidden" name="FlightId" value="@Model.Id" readonly />
+            <div>
+                <label for="PassengerViewModels">Passengers</label>
+                <select asp-for="PassengerViewModels" name="PassengerId">
+                    <option selected disabled>Choose Passenger</option>
+                    @foreach (var p in @Model.PassengerViewModels) //This creates a dropdown of all the peoples names received from the database
+                    {
+                        <option value=@p.Id>@p.PrintAllName</option>
+                    }
+                </select>
+            </div>
+            <button type="submit">Book</button>
+            <button asp-controller="Flight" asp-action="Index" id="cancelButton">Cancel</button>
+        </form>
+    </div>
+}
+else
+{
+    <h2 class="text-danger">
+        You can't accesss this page if you aren't logged in.
+    </h2>
+}
