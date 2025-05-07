@@ -1,12 +1,12 @@
-﻿namespace AirlineTicketSystem.Data
+﻿namespace Airline_Ticket_System.Data
 {
 
     using System;
     using System.Threading.Tasks;
     using Airline_Ticket_System.Configurations;
-    using AirlineTicketSystem.Data.Constants;
-    using AirlineTicketSystem.Data.Entities;
-    using AirlineTicketSystem.Repositories;
+    using Airline_Ticket_System.Data.Constants;
+    using Airline_Ticket_System.Data.Entities;
+    using Airline_Ticket_System.Repositories;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
@@ -77,7 +77,7 @@
             if (user == null)
             {
                 user = new ApplicationUser { 
-                    Name = adminSettings.Name, 
+                    FirstName = adminSettings.Name,
                     UserName = adminSettings.Email, 
                     Email = adminSettings.Email
                 };

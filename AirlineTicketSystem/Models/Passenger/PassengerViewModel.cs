@@ -1,4 +1,4 @@
-﻿namespace AirlineTicketSystem.Models.Passenger
+﻿namespace Airline_Ticket_System.Models.Passenger
 {
     public class PassengerViewModel
     {

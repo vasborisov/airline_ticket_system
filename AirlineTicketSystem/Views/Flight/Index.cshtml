@@ -1,5 +1,5 @@
-﻿﻿@using AirlineTicketSystem.Models.Flight
-﻿@using AirlineTicketSystem.Data.Constants
+﻿﻿@using Airline_Ticket_System.Models.Flight
+﻿@using Airline_Ticket_System.Data.Constants
 
 @model IEnumerable<FlightViewModel>
 @{
@@ -11,6 +11,7 @@
     ViewData["Title"] = "Flights";
 }
 
+
     <h2>Flights</h2>
     <form asp-controller="Flight">
         <p>
@@ -19,6 +20,14 @@
             <input type="submit" value="Reset" asp-action="Reset" />
         </p>
     </form>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
     <table class="table">
         <thead>
             <tr>
@@ -39,10 +48,6 @@
 </thead>
 
 <tbody>
-
-
-
-
 
 @foreach (var flight in Model)
     {
@@ -65,37 +70,51 @@
              @if (User.Identity?.IsAuthenticated ?? false)
             {
             <th>
-                @if (!@flight.IsFullyBooked && (isAdmin || isOperator))
+                        @if (isAdmin || isOperator)
+                        {
+
+                            <a asp-controller="Flight"
+                               asp-action="Details"
+                               asp-route-id="@flight.Id">
+                                Details
+                            </a>
+                        }
+                @if (!@flight.IsFullyBooked)
                 {
-                <button>
-                    <a asp-controller="Flight"
-                       asp-action="BookSeat"
+                
+                    <a asp-controller="Booking"
+                       asp-action="Create"
                        asp-route-id="@flight.Id">
                         Book Seat
                     </a>
-                </button>
-            }
+    
+                }
 
-            @if (isAdmin)
+                @if (isAdmin && !flight.PassengerViewModels.Any())
                 {
-            <button>
+ 
                 <a asp-controller="Flight"
                    asp-action="Edit"
                    asp-route-id="@flight.Id">
                     Edit
                 </a>
-            </button>
-            <button>
+            
+          
                 <a asp-controller="Flight"
                    asp-action="Delete"
                    asp-route-id="@flight.Id">
                     Delete
                 </a>
-            </button>
-            }
+        
+                }
+                
             </th>
             }
     </tr>
 }
 </tbody>
 </table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

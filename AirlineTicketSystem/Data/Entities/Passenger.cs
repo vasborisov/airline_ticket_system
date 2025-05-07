@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AirlineTicketSystem.Entities
+namespace Airline_Ticket_System.Entities
 {
     public class Passenger
     {
@@ -12,14 +12,14 @@ namespace AirlineTicketSystem.Entities
         public string FirstName { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public string FamilyName { get; set; }
 
         public virtual ICollection<FlightPassenger> FlightPassengers { get; set; }
 
-        public Passenger(string firstName, string lastName)
+        public Passenger(string firstName, string familyName)
         {
             this.FirstName = firstName;
-            this.LastName = lastName;
+            this.FamilyName = familyName;
         }
     }
 }

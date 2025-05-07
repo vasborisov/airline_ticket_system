@@ -1,6 +1,6 @@
 using System;
 
-namespace AirlineTicketSystem.Models
+namespace Airline_Ticket_System.Models
 {
     public class ErrorViewModel
     {

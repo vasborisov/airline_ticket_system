@@ -1,13 +1,13 @@
-﻿using AirlineTicketSystem.Models.User;
+﻿using Airline_Ticket_System.Models.User;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AirlineTicketSystem.Data.Constants;
+using Airline_Ticket_System.Data.Constants;
 
-namespace AirlineTicketSystem.Services.Interfaces
+namespace Airline_Ticket_System.Services.Interfaces
 {
     public interface IUserService
     {
-        Task SeedUserWithRoleAsync(string email, string password, UserRolesEnum role);
+        Task SeedUserWithRoleAsync(string email, string firstName, string familyName, string password, UserRolesEnum role);
 
         IEnumerable<UserViewModel> GetAll();
 

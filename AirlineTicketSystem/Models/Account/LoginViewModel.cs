@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AirlineTicketSystem.Models.Account
+namespace Airline_Ticket_System.Models.Account
 {
     public class LoginViewModel
     {

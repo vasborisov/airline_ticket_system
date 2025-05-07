@@ -1,14 +1,14 @@
-﻿using AirlineTicketSystem.Data.Constants;
-using AirlineTicketSystem.Data.Entities;
-using AirlineTicketSystem.Models.User;
-using AirlineTicketSystem.Services.Interfaces;
+﻿using Airline_Ticket_System.Data.Constants;
+using Airline_Ticket_System.Data.Entities;
+using Airline_Ticket_System.Models.User;
+using Airline_Ticket_System.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AirlineTicketSystem.Services
+namespace Airline_Ticket_System.Services
 {
     public class UserService : IUserService
     {
@@ -23,11 +23,11 @@ namespace AirlineTicketSystem.Services
             this.roleManager = roleManager;
         }
 
-        public async Task SeedUserWithRoleAsync(string email, string password, UserRolesEnum role)
+        public async Task SeedUserWithRoleAsync(string email, string firstName, string familyName, string password, UserRolesEnum role)
         {
             if (await userManager.FindByEmailAsync(email) == null)
             {
-                var user = CreateUser(email);
+                var user = CreateUser(email, firstName, familyName);
                 var result = await userManager.CreateAsync(user, password);
 
                 if (result.Succeeded)
@@ -45,7 +45,7 @@ namespace AirlineTicketSystem.Services
         public IEnumerable<UserViewModel> GetAll()
         {
 
-           return userManager.Users.Select(user => new UserViewModel(user.Id, user.Email, user.Name, string.Join(", ", userManager.GetRolesAsync(user).Result)));
+           return userManager.Users.Select(user => new UserViewModel(user.Id, user.Email, user.FirstName, user.FamilyName, string.Join(", ", userManager.GetRolesAsync(user).Result)));
         }
 
         public async Task<IEnumerable<UserViewModel>> GetAllAsync()
@@ -57,7 +57,7 @@ namespace AirlineTicketSystem.Services
             {
                 var usersInRoleEntities = await userManager.GetUsersInRoleAsync(role.ToString());
                 var usersInRole = usersInRoleEntities
-                    .Select(user => new UserViewModel(user.Id, user.Email, user.Name, role.ToString()));
+                    .Select(user => new UserViewModel(user.Id, user.Email, user.FirstName, user.FamilyName, role.ToString()));
 
                 users.AddRange(usersInRole);
             }
@@ -66,14 +66,15 @@ namespace AirlineTicketSystem.Services
         }
 
 
-        private ApplicationUser CreateUser(string email)
+        private ApplicationUser CreateUser(string email, string firstName, string familyName)
         {
             return new ApplicationUser()
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = email,
                 UserName = email,
-                Name = email
+                FirstName = firstName,
+                FamilyName = familyName
             };
         }
     }

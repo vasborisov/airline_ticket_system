@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace AirlineTicketSystem.Data.Entities
+namespace Airline_Ticket_System.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public string Name { set; get; }
+        public string FirstName { set; get; }
+
+        public string FamilyName { set; get; }
     }
 }

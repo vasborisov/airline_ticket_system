@@ -1,12 +1,12 @@
-﻿using AirlineTicketSystem.Entities;
-using AirlineTicketSystem.Models.Flight;
-using AirlineTicketSystem.Repositories.Interfaces;
-using AirlineTicketSystem.Services;
+﻿using Airline_Ticket_System.Entities;
+using Airline_Ticket_System.Models.Flight;
+using Airline_Ticket_System.Repositories.Interfaces;
+using Airline_Ticket_System.Services;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace AirlineTicketSystem.Tests.Services
+namespace Airline_Ticket_System.Tests.Services
 {
     public class LoadAllFlights_Test
     {

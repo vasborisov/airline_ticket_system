@@ -1,4 +1,4 @@
-﻿@model AirlineTicketSystem.Models.Flight.FlightViewModel
+﻿@model Airline_Ticket_System.Models.Flight.FlightViewModel
 @{
     var isAdmin = User.IsInRole("Admin");
 }
@@ -14,27 +14,31 @@
         <h2>New Flight</h2>
 
         <form method="post" asp-controller="Flight" asp-action="Create">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
             <div>
                     <label asp-for="DepartureCity" class="control-label"></label>
                     <input asp-for="DepartureCity" class="form-control" />
                     <span asp-validation-for="DepartureCity" class="text-danger"></span>
             </div>
             <div>
-                <label asp-for="ArrivalCity" class="control-label">Arrival City</label>
+                <label asp-for="ArrivalCity" class="control-label"></label>
                 <input type="text" asp-for="ArrivalCity" class="form-control" />
                 <span asp-validation-for="ArrivalCity" class="text-danger"></span>
             </div>
             <div>
-                <label for="Duration">Duration</label>
-                <input type="number" id="Duration" name="Duration" />
+                <label asp-for="Duration">Duration</label>
+                <input type="number" asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div>
-                <label for="Price">Price</label>
-                <input type="text" id="Price" name="Price" />
+                <label asp-for="Price"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div>
-                <label for="Capacity">Capacity</label>
-                <input type="number" id="Capacity" name="Capacity" />
+                <label asp-for="Capacity"></label>
+                <input type="number" asp-for="Capacity" class="form-control" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
             </div>
 
             <button type="submit">Create</button>
@@ -47,4 +51,8 @@ else
     <h2 class="text-danger">
         You can't accesss this page if you aren't logged in.
     </h2>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

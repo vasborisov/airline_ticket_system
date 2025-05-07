@@ -1,29 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using AirlineTicketSystem.Data.Entities
+@using Airline_Ticket_System.Data.Entities
 
-@inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var isUser = User.IsInRole("User");
+}
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+<ul class="navbar-nav ms-auto">
+    @if (User.Identity.IsAuthenticated)
     {
+        @if (isUser)
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Account" asp-action="EditProfile">Edit Profile</a>
+            </li>
+        }
         <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-page="/Account/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-        </li>
-        <li class="nav-item">
-            <form id="logoutForm" class="form-inline"
-                  asp-controller="Account" asp-action="Logout" method="post">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="register" asp-controller="Account" asp-action="Register">Sign Up</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
     }
 </ul>

@@ -1,5 +1,5 @@
-﻿@using AirlineTicketSystem.Data.Entities
-@using AirlineTicketSystem.Models
+﻿@using Airline_Ticket_System.Data.Entities
+@using Airline_Ticket_System.Models
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
 @model IEnumerable<ApplicationUser>
@@ -12,20 +12,21 @@
 {
     <div class="container mt-4">
         <div class="text-center mb-4">
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                </div>
-            }
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+            <div class="mb-3 text-end">
+                <a class="btn btn-success" asp-area="" asp-controller="Account" asp-action="RegisterOperator">
+                    New Operator
+                </a>
+            </div>
+
+
             <table class="table table-hover table-striped table-bordered shadow-sm">
                 <thead class="thead-light">
                     <tr>
                         <th>User</th>
                         <th>Email</th>
-                        <th>Status</th>
                         <th>Role</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,7 +36,7 @@
                         var roleNames = string.Join(", ", roles);
 
                         <tr>
-                            <td>@user.Name</td>
+                            <td>@($"{user.FirstName} {user.FamilyName}")</td>
                             <td>@user.Email</td>
                             <td>@roleNames</td>
                         </tr>
@@ -45,14 +46,7 @@
         </div>
     </div>
 }
-else
-{
-    {
-    var url = Url.Action("Users", "Account");
-    }
-    <script>
-        window.location.href = "url";
-    </script>
-
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
 

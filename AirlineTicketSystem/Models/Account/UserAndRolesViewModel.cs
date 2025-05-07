@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AirlineTicketSystem.Data.Entities;
+using Airline_Ticket_System.Data.Entities;
 
-namespace AirlineTicketSystem.Models
+namespace Airline_Ticket_System.Models
 {
     public class UserAndRolesViewModel
     {

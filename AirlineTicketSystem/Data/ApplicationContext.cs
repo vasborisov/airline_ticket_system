@@ -1,11 +1,11 @@
-﻿using AirlineTicketSystem.Data.Entities;
-using AirlineTicketSystem.Entities;
+﻿using Airline_Ticket_System.Data.Entities;
+using Airline_Ticket_System.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace AirlineTicketSystem.Repositories
+namespace Airline_Ticket_System.Repositories
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {

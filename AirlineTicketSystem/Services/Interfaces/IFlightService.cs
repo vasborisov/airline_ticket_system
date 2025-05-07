@@ -1,21 +1,16 @@
-﻿using AirlineTicketSystem.Models.Flight;
+﻿using Airline_Ticket_System.Entities;
 using System.Collections.Generic;
 
-namespace AirlineTicketSystem.Services.Interfaces
+namespace Airline_Ticket_System.Services.Interfaces
 {
     public interface IFlightService
     {
-        Task AddFlight(CreateFlightViewModel flightCreateModel);
-        Task<FlightViewModel?> GetFlight(int id, bool withPassengerList = false);
+        Task AddFlight(Flight flight);
 
-        Task EditAsync(EditFlightViewModel flight);
+        Task DeleteFlightAsync(Flight flight);
 
-        Task DeleteFlightAsync(int id);
-
-        Task<IEnumerable<FlightViewModel>> LoadAllFlightsAsync();
-        void Search();
-        Task BookSeatAsync(int flightId, int passengerId);
+        Task<IEnumerable<Flight>> LoadAllFlightsAsync();
+        Task BookSeatAsync(Flight flight, Passenger passenger);
         void CancelBookedSeat();
-        void RegisterPassanger();
     }
 }

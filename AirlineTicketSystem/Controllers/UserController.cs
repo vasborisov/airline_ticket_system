@@ -1,8 +1,8 @@
-﻿using AirlineTicketSystem.Services.Interfaces;
+﻿using Airline_Ticket_System.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace AirlineTicketSystem.Controllers
+namespace Airline_Ticket_System.Controllers
 {
     public class UserController : Controller
     {

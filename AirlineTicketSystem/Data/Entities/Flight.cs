@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AirlineTicketSystem.Entities
+namespace Airline_Ticket_System.Entities
 {
     public class Flight
     {

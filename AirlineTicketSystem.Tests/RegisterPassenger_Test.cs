@@ -1,11 +1,11 @@
-﻿using AirlineTicketSystem.Entities;
-using AirlineTicketSystem.Models.Passenger;
-using AirlineTicketSystem.Repositories.Interfaces;
-using AirlineTicketSystem.Services;
+﻿using Airline_Ticket_System.Entities;
+using Airline_Ticket_System.Models.Passenger;
+using Airline_Ticket_System.Repositories.Interfaces;
+using Airline_Ticket_System.Services;
 using Moq;
 using Xunit;
 
-namespace AirlineTicketSystem.Tests.Services
+namespace Airline_Ticket_System.Tests.Services
 {
     public class RegisterPassenger_Test
     {

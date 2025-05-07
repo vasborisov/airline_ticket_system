@@ -42,16 +42,28 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Account/RegisterOperator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlck9wZXJhdG9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Account/Users.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxVc2Vycy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Flight/BookSeat.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxpZ2h0XEJvb2tTZWF0LmNzaHRtbA==
+[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Booking/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Booking/MyBooked.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xNeUJvb2tlZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Flight/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxpZ2h0XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Flight/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxpZ2h0XERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Flight/Edit.cshtml]
@@ -62,8 +74,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxpZ2h0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Passenger/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFzc2VuZ2VyXENyZWF0ZS5jc2h0bWw=
+[C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/PC/Documents/Projects/airline_ticket_system/AirlineTicketSystem/Views/Shared/Error.cshtml]

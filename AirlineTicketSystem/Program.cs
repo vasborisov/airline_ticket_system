@@ -1,9 +1,9 @@
 using Airline_Ticket_System.Configurations;
-using AirlineTicketSystem.Data;
-using AirlineTicketSystem.Data.Entities;
-using AirlineTicketSystem.Repositories;
-using AirlineTicketSystem.Services.Interfaces;
-using AirlineTicketSystem.Services;
+using Airline_Ticket_System.Data;
+using Airline_Ticket_System.Data.Entities;
+using Airline_Ticket_System.Repositories;
+using Airline_Ticket_System.Services.Interfaces;
+using Airline_Ticket_System.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +44,6 @@ public class Program
 
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IFlightService, FlightService>();
-        builder.Services.AddScoped<IPassengerService, PassengerService>();
     }
 
     public static void ConfigureApp(WebApplication app)
@@ -69,7 +68,7 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Flight}/{action=Index}/{id?}");
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
     }
 

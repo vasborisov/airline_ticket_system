@@ -1,14 +1,14 @@
-﻿using AirlineTicketSystem.Data.Constants;
-using AirlineTicketSystem.Data.Entities;
-using AirlineTicketSystem.Models;
-using AirlineTicketSystem.Models.Account;
-using AirlineTicketSystem.Repositories;
+﻿using Airline_Ticket_System.Data.Constants;
+using Airline_Ticket_System.Data.Entities;
+using Airline_Ticket_System.Models;
+using Airline_Ticket_System.Models.Account;
+using Airline_Ticket_System.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AirlineTicketSystem.Controllers
+namespace Airline_Ticket_System.Controllers
 { 
     public class AccountController : Controller
     {
@@ -52,14 +52,15 @@ namespace AirlineTicketSystem.Controllers
                 if (existingUser != null)
                 {
                     // Add an error to the model state if the user already exists
-                    ModelState.AddModelError(string.Empty, "A user with this email already exists.");
+                    ModelState.AddModelError(string.Empty, "A user with provided email already exists.");
                     return View(model);
                 }
 
                 var user = new ApplicationUser {
                     UserName = model.Email, 
                     Email = model.Email,
-                    Name = model.Name
+                    FirstName = model.FirstName,
+                    FamilyName = model.FamilyName
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -70,6 +71,53 @@ namespace AirlineTicketSystem.Controllers
                     _logger.LogInformation("User registered successfully.");
 
                     return RedirectToAction("Login");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult RegisterOperator()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterOperator(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    // Add an error to the model state if the user already exists
+                    ModelState.AddModelError(string.Empty, "A user with provided email already exists.");
+                    return View(model);
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    FamilyName = model.FamilyName
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, UserRolesEnum.Operator.ToString());
+
+                    _logger.LogInformation("Operator registered successfully.");
+
+                    return RedirectToAction("Users");
                 }
 
                 foreach (var error in result.Errors)
@@ -109,13 +157,13 @@ namespace AirlineTicketSystem.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt");
                         return View(model);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt");
                 }
 
             }
@@ -126,10 +174,11 @@ namespace AirlineTicketSystem.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Flight");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> EditProfile()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -144,7 +193,8 @@ namespace AirlineTicketSystem.Controllers
                 var roles = await _userManager.GetRolesAsync(user);
                 var model = new ProfileViewModel
                 {
-                    Name = applicationUser.Name,
+                    FirstName = applicationUser.FirstName,
+                    FamilyName = applicationUser.FamilyName,
                     Email = user.Email,
                     Roles = roles
                 };
@@ -159,6 +209,7 @@ namespace AirlineTicketSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> EditProfile(ProfileViewModel model)
         {
             if (ModelState.IsValid)
@@ -177,7 +228,8 @@ namespace AirlineTicketSystem.Controllers
                 }
 
                 var applicationUser = user as ApplicationUser;
-                applicationUser.Name = model.Name;
+                applicationUser.FirstName = model.FirstName;
+                applicationUser.FamilyName = model.FamilyName;  
                 applicationUser.UserName = model.Email;
                 applicationUser.Email = model.Email;
                 

@@ -1,12 +1,16 @@
 ﻿
 
-namespace AirlineTicketSystem.Models.Flight
+using System.ComponentModel.DataAnnotations;
+
+namespace Airline_Ticket_System.Models.Flight
 {
     public class FlightViewModel
     {
         public int Id { get; set; }
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }
+
+        [Display(Name = "Duration (in minutes)")]
         public int Duration { get; set; }
         public decimal Price { get; set; }
         public int Capacity { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace AirlineTicketSystem.Data.Constants
+﻿namespace Airline_Ticket_System.Data.Constants
 {
     public enum UserRolesEnum
     {
