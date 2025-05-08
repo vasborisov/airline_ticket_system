@@ -16,6 +16,7 @@ namespace Airline_Ticket_System.Entities
 
         public virtual ICollection<FlightPassenger> FlightPassengers { get; set; }
 
+
         public Passenger(string firstName, string familyName)
         {
             this.FirstName = firstName;

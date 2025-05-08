@@ -13,7 +13,7 @@
 
     public static class DatabaseSeedData
     {
-        public static async void Initialize(WebApplication app)
+        public static async Task Initialize(WebApplication app)
         {
 
             using (var serviceScope = app.Services.CreateScope())
@@ -34,7 +34,7 @@
             }
         }
 
-        private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager) 
+        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager) 
         {
             foreach (UserRolesEnum role in Enum.GetValues(typeof(UserRolesEnum)))
             {
@@ -70,7 +70,7 @@
             }
         }
 
-        private static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager, IOptions<AdminUserSettings> adminOptions)
+       public static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager, IOptions<AdminUserSettings> adminOptions)
         {
             var adminSettings = adminOptions.Value;
             var user = await userManager.FindByEmailAsync(adminSettings.Email);
