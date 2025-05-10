@@ -12,17 +12,18 @@
         <p><strong>Price:</strong> @Model.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("fr-FR"))</p>
     </div>
 </div>
+
 <form asp-action="Create" method="post">
     @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
     <input type="hidden" asp-for="FlightId" />
-    @if(isUser)
+
+    @if (isUser)
     {
         <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" asp-for="IsBookingForSelf" id="isBookingForSelf" onchange="handleBookingMode()" />
+            <input class="form-check-input" type="checkbox" asp-for="IsBookingForSelf" id="isBookingForSelf" onchange="handleBookingMode()" checked="@Model.IsBookingForSelf" />
             <label class="form-check-label" for="isBookingForSelf">Booking for myself</label>
         </div>
     }
-    
 
     <div class="form-group" id="create-new-toggle">
         <label>
@@ -44,11 +45,11 @@
     <div id="new-passenger-fields" style="display:none;">
         <div class="form-group">
             <label asp-for="FirstName"></label>
-            <input asp-for="FirstName" class="form-control" />
+            <input asp-for="FirstName" class="form-control" readonly="readonly" />
         </div>
         <div class="form-group">
             <label asp-for="FamilyName"></label>
-            <input asp-for="FamilyName" class="form-control" />
+            <input asp-for="FamilyName" class="form-control" readonly="readonly" />
         </div>
     </div>
 
@@ -64,41 +65,69 @@
     }
 
     <script>
+         
         function togglePassengerFields() {
-                const createNew = document.getElementById("createNewPassenger").checked;
-                document.getElementById("existing-passenger-fields").style.display = createNew ? "none" : "block";
-                document.getElementById("new-passenger-fields").style.display = createNew ? "block" : "none";
-                if (createNew) { 
-                    clearPassengerFields();
-                }
+            const createNewCheckbox = document.getElementById("createNewPassenger");
+            const createNew = createNewCheckbox ? createNewCheckbox.checked : false;
+           
+            if (createNew) {
+                clearPassengerFields();
+                document.getElementById("existing-passenger-fields").style.display = "none";
+                document.getElementById("new-passenger-fields").style.display = "block"
+            }
+            else {
+                document.getElementById("existing-passenger-fields").style.display = "block";
+                document.getElementById("new-passenger-fields").style.display = "none";
+            }
+           handleBookingMode();
         }
 
-        function handleBookingMode() {
-            const isSelf = document.getElementById("isBookingForSelf").checked;
+        function handleBookingMode(isUser) {
+            const bookingCheckbox = document.getElementById("isBookingForSelf");
+            const isSelf = bookingCheckbox ? bookingCheckbox.checked : false;
             const toggleDiv = document.getElementById("create-new-toggle");
             toggleDiv.style.display = isSelf ? "none" : "block";
 
+           
+            const newPassengerFields = document.getElementById("new-passenger-fields");
+            
             if (isSelf) {
-                // force uncheck createNewPassenger and hide all manual fields
-                document.getElementById("createNewPassenger").checked = false;
-                document.getElementById("new-passenger-fields").style.display = "block";
+                newPassengerFields.style.display = "block";
+                document.getElementById("FirstName").readOnly = true;
+                document.getElementById("FamilyName").readOnly = true;
+
+                document.getElementById("createNewPassenger").disabled = true;
+            } else {
+                document.getElementById("FirstName").readOnly = false;
+                document.getElementById("FamilyName").readOnly = false;
+
+                document.getElementById("createNewPassenger").disabled = false; 
             }
 
-            togglePassengerFields();
+            const createNewCheckbox = document.getElementById("createNewPassenger");
+            const createNew = createNewCheckbox ? createNewCheckbox.checked : false;
+            if (createNew) {
+                clearPassengerFields();
+                document.getElementById("existing-passenger-fields").style.display = "none";
+                document.getElementById("new-passenger-fields").style.display = "block"
+            }
+            else {
+                document.getElementById("existing-passenger-fields").style.display = "block";
+                document.getElementById("new-passenger-fields").style.display = "none";
+            }
+
         }
 
         function clearPassengerFields() {
             const select = document.getElementById("SelectedPassengerId");
             if (select) {
-                select.selectedIndex = 0; // or set to -1 to fully clear selection
+                select.selectedIndex = -1; // or set to -1 to fully clear selection
             }
         }
 
         document.addEventListener("DOMContentLoaded", function () {
+            handleBookingMode(); 
             togglePassengerFields();
-            handleBookingMode();
         });
-   
     </script>
 }
-

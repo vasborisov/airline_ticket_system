@@ -255,34 +255,25 @@ namespace Airline_Ticket_System.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
-            var nonAdminUsers = await (from user in _context.Users
-                                       join userRole in _context.UserRoles on user.Id equals userRole.UserId
-                                       join role in _context.Roles on userRole.RoleId equals role.Id
-                                       where role.Name != "Admin"
-                                       select user)
-                            .ToListAsync();
-            return View(nonAdminUsers);
-        }
+            var adminRoleId = await _context.Roles
+                                .Where(r => r.Name == UserRolesEnum.Admin.ToString())
+                                .Select(r => r.Id)
+                                .FirstOrDefaultAsync();
 
-        public async Task<IActionResult> Index()
-        {
-            var users = await _userManager.Users.ToListAsync();
-            var userViewModels = new List<UserAndRolesViewModel>();
-
-            foreach (var user in users)
+            if (string.IsNullOrEmpty(adminRoleId))
             {
-                var roles = await _userManager.GetRolesAsync(user);
-
-                userViewModels.Add(new UserAndRolesViewModel
-                {
-                    User = user,
-                    Roles = roles.ToList()
-                });
+                return View(new List<ApplicationUser>());
             }
 
-            return View(userViewModels);
-        }
+            var nonAdminUsers = await _context.Users
+                .Where(u => !_context.UserRoles
+                    .Where(ur => ur.RoleId == adminRoleId)
+                    .Select(ur => ur.UserId)
+                    .Contains(u.Id))
+                .ToListAsync();
 
+            return View(nonAdminUsers);
+        }
 
         public IActionResult AccessDenied()
         {

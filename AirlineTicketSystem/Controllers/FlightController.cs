@@ -218,40 +218,6 @@ namespace Airline_Ticket_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName("BookSeatAsync")]
-        public async Task<IActionResult> BookSeatAsync(BookSeatViewModel bookSeatModel)
-        {
-            var flight = await _context.Flights.FirstOrDefaultAsync(f => f.Id == bookSeatModel.FlightId);
-
-            // Check if the flight exists
-            if (flight == null)
-            {
-                // If the flight doesn't exist
-                ModelState.AddModelError(string.Empty, "A flight with the provided id does not exist");
-                return RedirectToAction(nameof(Index));
-            }
-
-            if (flight.Capacity <= 0)
-            {
-                ModelState.AddModelError(string.Empty, "A flight is full booked.");
-                return RedirectToAction(nameof(Index));
-            }
-
-            var passenger = await _context.Passengers.FirstOrDefaultAsync(p=> p.Id == bookSeatModel.PassengerId);
-            if (passenger == null)
-            {
-                // If the passenger doesn't exist
-                ModelState.AddModelError(string.Empty, "A passenger with the provided id does not exist");
-                return RedirectToAction(nameof(Index));
-            }
-            
-            await _flightService.BookSeatAsync(flight, passenger);
-
-            return RedirectToAction(nameof(Index));
-        }
-
         public async Task<IActionResult> Details(int id)
         {
             var flight = await _context.Flights

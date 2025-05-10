@@ -64,6 +64,7 @@ namespace Airline_Ticket_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookSeatViewModel model)
         {
+            // First, validate the model state
             if (!ModelState.IsValid)
             {
                 model.ExistingPassengers = await _context.Passengers
@@ -78,24 +79,26 @@ namespace Airline_Ticket_System.Controllers
 
             var flight = await _context.Flights.FirstOrDefaultAsync(f => f.Id == model.FlightId);
 
-            // Check if the flight exists
+            // Ensure the flight exists
             if (flight == null)
             {
-                // If the flight doesn't exist
                 ModelState.AddModelError(string.Empty, "A flight with the provided id does not exist");
                 return View(model);
             }
 
+            // Ensure the flight has availability
             if (flight.Capacity <= 0)
             {
-                ModelState.AddModelError(string.Empty, "A flight is full booked.");
+                ModelState.AddModelError(string.Empty, "The flight is fully booked.");
                 return View(model);
             }
 
+            var currentUser = await _userManager.GetUserAsync(User);
             Passenger passenger;
 
             if (model.CreateNewPassenger)
             {
+                // If creating a new passenger, validate FirstName and FamilyName
                 if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.FamilyName))
                 {
                     ModelState.AddModelError("", "Please provide both First and Family names for a new passenger.");
@@ -110,23 +113,22 @@ namespace Airline_Ticket_System.Controllers
                     model.ArrivalCity = flight.ArrivalCity;
                     model.Duration = flight.Duration;
                     model.Price = flight.Price;
-                   
                     return View(model);
                 }
 
                 var existingPassenger = await _context.Passengers
-                                                .FirstOrDefaultAsync(p =>
-                                                    p.FirstName.ToLower() == model.FirstName.Trim().ToLower() &&
-                                                    p.FamilyName.ToLower() == model.FamilyName.Trim().ToLower());
+                    .FirstOrDefaultAsync(p =>
+                        p.FirstName.ToLower() == model.FirstName.Trim().ToLower() &&
+                        p.FamilyName.ToLower() == model.FamilyName.Trim().ToLower());
 
                 if (existingPassenger != null)
                 {
-                    // Passenger already exists
+                    // Use the existing passenger if found
                     passenger = existingPassenger;
                 }
                 else
                 {
-                    // Create new passenger as before
+                    // Otherwise, create a new passenger
                     passenger = new Passenger(model.FirstName.Trim(), model.FamilyName.Trim());
                     _context.Passengers.Add(passenger);
                     await _context.SaveChangesAsync();
@@ -134,6 +136,7 @@ namespace Airline_Ticket_System.Controllers
             }
             else if (model.SelectedPassengerId.HasValue)
             {
+                // If selecting an existing passenger, ensure one is selected
                 passenger = await _context.Passengers.FindAsync(model.SelectedPassengerId.Value);
                 if (passenger == null)
                 {
@@ -151,8 +154,49 @@ namespace Airline_Ticket_System.Controllers
                     return View(model);
                 }
             }
+            else if (model.IsBookingForSelf)
+            {
+                var existingPassenger = await _context.Passengers
+                    .FirstOrDefaultAsync(p =>
+                        p.FirstName.ToLower() == currentUser.FirstName.Trim().ToLower() &&
+                        p.FamilyName.ToLower() == currentUser.FamilyName.Trim().ToLower());
+
+                if (existingPassenger == null)
+                {
+                    // If no passenger with the same name is found, create a new passenger entry
+                    passenger = new Passenger(currentUser.FirstName, currentUser.FamilyName);
+                    _context.Passengers.Add(passenger);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    // If passenger already exists, assign the existing passenger
+                    passenger = existingPassenger;
+                }
+
+                var isUserAlreadyBooked = await _context.FlightPassengers
+                        .AnyAsync(b => b.FlightId == flight.Id && b.PassengerId == existingPassenger.Id);
+
+                if (isUserAlreadyBooked)
+                {
+                    // If the passenger has already booked the flight, show an error
+                    ModelState.AddModelError("", "You have already booked this flight.");
+                    model.ExistingPassengers = await _context.Passengers
+                        .Select(p => new SelectListItem
+                        {
+                            Value = p.Id.ToString(),
+                            Text = $"{p.FirstName} {p.FamilyName}"
+                        }).ToListAsync();
+                    model.DepartureCity = flight.DepartureCity;
+                    model.ArrivalCity = flight.ArrivalCity;
+                    model.Duration = flight.Duration;
+                    model.Price = flight.Price;
+                    return View(model);
+                }
+            }
             else
             {
+                // If neither a new passenger nor an existing passenger is selected, show an error
                 ModelState.AddModelError("", "You must select or create a passenger.");
                 model.ExistingPassengers = await _context.Passengers
                     .Select(p => new SelectListItem
@@ -160,11 +204,16 @@ namespace Airline_Ticket_System.Controllers
                         Value = p.Id.ToString(),
                         Text = $"{p.FirstName} {p.FamilyName}"
                     }).ToListAsync();
+                model.DepartureCity = flight.DepartureCity;
+                model.ArrivalCity = flight.ArrivalCity;
+                model.Duration = flight.Duration;
+                model.Price = flight.Price;
                 return View(model);
             }
 
+            // Check if the passenger already booked the flight
             bool alreadyBooked = await _context.FlightPassengers
-                                                .AnyAsync(b => b.PassengerId == passenger.Id && b.FlightId == model.FlightId);
+                .AnyAsync(b => b.PassengerId == passenger.Id && b.FlightId == model.FlightId);
 
             if (alreadyBooked)
             {
@@ -182,7 +231,8 @@ namespace Airline_Ticket_System.Controllers
                 return View(model);
             }
 
-            var currentUser = await _userManager.GetUserAsync(User);
+            // Proceed with booking the flight
+            
             flight.Capacity -= 1;
 
             var booking = new FlightPassenger
@@ -193,7 +243,6 @@ namespace Airline_Ticket_System.Controllers
                 CreatedByUserId = currentUser?.Id
             };
 
-            
             _context.FlightPassengers.Add(booking);
             await _context.SaveChangesAsync();
 

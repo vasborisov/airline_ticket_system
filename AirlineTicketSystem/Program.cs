@@ -42,7 +42,6 @@ public class Program
 
         builder.Services.Configure<AdminUserSettings>(builder.Configuration.GetSection("AdminUser"));
 
-        builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IFlightService, FlightService>();
     }
 
